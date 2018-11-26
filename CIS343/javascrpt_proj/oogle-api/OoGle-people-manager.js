@@ -9,6 +9,8 @@ const fs = require('fs');
 // and can be accessed as if it was any other javascript
 // object
 const database = require('./programmers.json');
+// Creating array instance of database objects
+const db = [database];
 
 // Make an instance of our express application
 const app = express();
@@ -26,24 +28,23 @@ if (!fs.existsSync('./programmers.json')) {
 // Build our routes
 
 app.get('/', (req, res) => {
-  res.send('Fill me in to return ALL programmers!');
+  res.send(db);
 });
 
 app.get('/:id', (req, res) => {
   const id = req.params.id;
-
-  res.send(`Fill me in to return values with ID: ${id}`);
+  res.send(db.find(item => item.firstName === id));
 });
 
 app.put('/:id', (req, res) => {
   const id = req.params.id;
-
   res.send(`Fill me in to update values with ID: ${id}`);
 });
 
 app.post('/', (req, res) => {
   const body = req.body; // Hold your JSON in here!
-
+  db.add(body);
+  console.log(db);
   res.send(`You sent: ${body}`);
 });
 
