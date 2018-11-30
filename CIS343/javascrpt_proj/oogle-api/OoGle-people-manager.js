@@ -68,20 +68,27 @@ app.get('/:id', (req, res) => {
 app.put('/:id', (req, res) => {
   const id = req.params.id;
   const body = req.body;  
+  const bodyKeys = Object.keys(body);
+  
+  /* Removing objects from database with PUT request SID */
   var i = db.length - 1;
-  /* Updating fields of items with PUT request ID */
-  console.log("ID", id);
   while(i >= 0){
-	console.log(db[i].SID);
 	if(db[i].SID === id){
-      dbKeys.forEach(key => {
-		if(body[key]){
-		  db[i][key] = body[key];
-		} else {}
-	  });  
+       db.splice(i, 1);
 	}
 	i--;
   }
+  
+  /* Putting data into appropriate structure */
+  let data = {};
+  dbKeys.forEach(key => {
+	if(body[key]){
+      data[key] = body[key];
+	} else {
+	  data[key] = "";
+	}
+  }); 
+  db.push(data);
   res.send(`Updated values with ID: ${id}`);
 });
 
